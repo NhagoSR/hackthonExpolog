@@ -1,0 +1,122 @@
+.group-2,
+.group-2 * {
+  box-sizing: border-box;
+}
+.group-2 {
+  width: 1894px;
+  height: 1080px;
+  position: static;
+}
+.rectangle-1 {
+  background: #d9d9d9;
+  width: 1893.9px;
+  height: 1080px;
+  position: absolute;
+  left: 1782.1px;
+  top: 116px;
+}
+.group-1 {
+  width: 1536px;
+  height: 141.12px;
+  position: absolute;
+  left: 1961.05px;
+  top: 945.44px;
+  overflow: visible;
+}
+.rectangle-3 {
+  background: #9d9b9b;
+  border-radius: 180px;
+  width: 521.28px;
+  height: 175.22px;
+  position: absolute;
+  left: 3310.64px;
+  top: 830.24px;
+  transform-origin: 0 0;
+  transform: rotate(-90deg) scale(1, 1);
+}
+.rectangle-6 {
+  background: #ff0000;
+  border-radius: 180px 0px 0px 180px;
+  width: 293.76px;
+  height: 175.22px;
+  position: absolute;
+  left: 3310.64px;
+  top: 830.24px;
+  transform-origin: 0 0;
+  transform: rotate(-90deg) scale(1, 1);
+}
+.rectangle-4 {
+  background: #9d9b9b;
+  border-radius: 180px;
+  width: 521.28px;
+  height: 175.22px;
+  position: absolute;
+  left: 3072.04px;
+  top: 830.24px;
+  transform-origin: 0 0;
+  transform: rotate(-90deg) scale(1, 1);
+}
+.rectangle-5 {
+  background: #ff0000;
+  border-radius: 180px 0px 0px 180px;
+  width: 360px;
+  height: 175.22px;
+  position: absolute;
+  left: 3072.04px;
+  top: 830.24px;
+  transform-origin: 0 0;
+  transform: rotate(-90deg) scale(1, 1);
+}
+.caminhaoS {
+  width: 1040.16px;
+  height: 487px;
+  position: absolute;
+  left: 1782px;
+  top: 381px;
+}
+.line-1 {
+  border-style: solid;
+  border-color: #ff0000;
+  border-width: 3px 0 0 0;
+  width: 175.22px;
+  height: 0px;
+  position: absolute;
+  left: 3072.04px;
+  top: 390.96px;
+  transform-origin: 0 0;
+  transform: rotate(0deg) scale(1, 1);
+}
+.line-2 {
+  border-style: solid;
+  border-color: #ff0000;
+  border-width: 3px 0 0 0;
+  width: 175.22px;
+  height: 0px;
+  position: absolute;
+  left: 3310.64px;
+  top: 390.96px;
+  transform-origin: 0 0;
+  transform: rotate(0deg) scale(1, 1);
+}
+.km-h {
+  color: #000000;
+  text-align: left;
+  font: 400 48px "IstokWeb-Regular", sans-serif;
+  position: absolute;
+  left: 3101px;
+  top: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.bpm {
+  color: #000000;
+  text-align: left;
+  font: 400 48px "IstokWeb-Regular", sans-serif;
+  position: absolute;
+  left: 3353px;
+  top: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}

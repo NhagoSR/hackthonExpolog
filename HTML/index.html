@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../CSS/style.css">
+    <title>Programa com Sliders e Dropdown</title>
+</head>
+<body>
+
+    <label for="kmSlider">KM:</label>
+    <input type="range" id="kmSlider" min="0" max="100" value="50" step="0.5">
+    <span id="kmValue">0</span> km
+
+    <br>
+
+    <label for="bpmSlider">BPM:</label>
+    <input type="range" id="bpmSlider" min="0" max="150" value="75" step="1">
+    <span id="bpmValue">60</span> bpm
+
+    <br>
+
+    <label for="dropdown">Escolha um motorista:</label>
+    <select id="dropdown"></select>
+
+    <a></a>
+
+    <script>
+        // Substitua 'SUA_PLANILHA_ID' e 'NOME_DA_COLUNA' pelos valores reais da sua planilha do Google Sheets.
+        const sheetId = '1L0Zpc6H83Df9oJF97wmhxzQjXCPSEQqjWlk2lq62JzY';
+        const columnName = 'A2:A';  // Agora considerando que a coluna A contém valores numéricos de km, B contém valores numéricos de bpm, e C e D são colunas adicionais
+
+        // URL para acessar a API do Google Sheets
+        const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${columnName}?key=AIzaSyC_uZgRCoSMnwfs2Aa10hE7JChpgM3-F6Y`;
+
+        // Função para buscar os valores da coluna na planilha
+        async function fetchSheetData() {
+            try {
+                console.log('Iniciando busca de dados da planilha...');
+
+                const response = await fetch(sheetUrl);
+
+                if (!response.ok) {
+                    throw new Error(`Erro na solicitação: ${response.status} - ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                if (!data.values || data.values.length === 0) {
+                    throw new Error('Nenhum dado encontrado na planilha.');
+                }
+
+                const values = data.values;
+
+                console.log('Dados encontrados:', values);
+
+                // Preencher o dropdown com os valores da coluna
+                const dropdown = document.getElementById('dropdown');
+                values.forEach(value => {
+                    const option = document.createElement('option');
+                    option.value = value[0];
+                    option.text = value[0];
+                    dropdown.appendChild(option);
+                });
+
+                console.log('Dados preenchidos no dropdown.');
+
+                // Retornar os valores para serem usados posteriormente
+                return values;
+
+            } catch (error) {
+                console.error('Erro ao buscar dados da planilha:', error.message);
+            }
+        }
+
+        // Função para atualizar os valores de km e bpm na planilha quando os sliders são movidos
+        function atualizarValoresNaPlanilha(km, bpm) {
+            const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/D2:E4?valueInputOption=RAW&key=AIzaSyC_uZgRCoSMnwfs2Aa10hE7JChpgM3-F6Y`;
+
+            fetch(sheetUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    values: [[km, bpm]],
+                }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Erro na solicitação: ${response.status} - ${response.statusText}`);
+                    }
+                    console.log('Valores de km e bpm atualizados com sucesso na planilha.');
+                })
+                .catch(error => {
+                    console.error('Erro ao atualizar valores de km e bpm:', error.message);
+                });
+        }
+
+        // Função para verificar condições e atualizar a coluna C
+        function atualizarColunaC(values) {
+            // Obter os valores de km e bpm dos sliders
+            const kmValue = parseFloat(document.getElementById('kmSlider').value);
+            const bpmValue = parseInt(document.getElementById('bpmSlider').value);
+
+            // Atualizar os valores na planilha
+            atualizarValoresNaPlanilha(kmValue, bpmValue);
+
+            // Verificar as condições
+            if (kmValue > 80 || bpmValue > 120) {
+                // Atualizar o valor da coluna C para "x"
+                const rowIndex = encontrarIndiceLinha(values);
+
+                if (rowIndex !== -1) {
+                    // Atualizar o valor na coluna C para "x"
+                    const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/C${rowIndex + 2}:C${rowIndex + 2}?valueInputOption=RAW&key=AIzaSyC_uZgRCoSMnwfs2Aa10hE7JChpgM3-F6Y`;
+                    fetch(sheetUrl, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            values: [['x']],
+                        }),
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Erro na solicitação: ${response.status} - ${response.statusText}`);
+                            }
+                            console.log('Valor da coluna C atualizado com sucesso.');
+                        })
+                        .catch(error => {
+                            console.error('Erro ao atualizar valor da coluna C:', error.message);
+                        });
+                }
+            }
+        }
+
+        // Função para encontrar o índice da linha correspondente às condições
+        function encontrarIndiceLinha(values) {
+            // Implemente a lógica para encontrar o índice da linha que atenda às condições.
+            // Aqui, estamos assumindo que a primeira linha que atende às condições é suficiente.
+            for (let i = 0; i < values.length; i++) {
+                const km = parseFloat(values[i][3]); // Índice 3 corresponde à coluna D
+                const bpm = parseInt(values[i][4]);   // Índice 4 corresponde à coluna E
+                if (km > 80 || bpm > 120) {
+                    return i;
+                }
+            }
+            return -1; // Retorna -1 se nenhuma linha atender às condições
+        }
+
+        // Chamada para buscar dados da planilha ao carregar a página
+        fetchSheetData().then(values => {
+            // Atualizar os valores dos sliders conforme são movidos
+            document.getElementById('kmSlider').addEventListener('input', function () {
+                document.getElementById('kmValue').textContent = this.value;
+                atualizarValoresNaPlanilha(parseFloat(this.value), parseInt(document.getElementById('bpmSlider').value));
+                atualizarColunaC(values);
+            });
+
+            document.getElementById('bpmSlider').addEventListener('input', function () {
+                document.getElementById('bpmValue').textContent = this.value;
+                atualizarValoresNaPlanilha(parseFloat(document.getElementById('kmSlider').value), parseInt(this.value));
+                atualizarColunaC(values);
+            });
+        });
+    </script>
+
+</body>
+</html>
